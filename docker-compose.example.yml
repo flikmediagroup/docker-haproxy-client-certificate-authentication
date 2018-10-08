@@ -1,0 +1,25 @@
+version: "2"
+services:
+  lb:
+    build: ./
+    volumes:
+      - ./haproxy.cfg.tmpl:/tmp/haproxy.cfg.tmpl
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - app
+    environment:
+      - |
+        SSL_CA_PEM=<full ca cert here>
+      - |
+        SSL_SERVER_PEM=<full server cert here>
+      - APP_HOST=app
+
+  app:
+    image: yourfineapp:v1
+    ports:
+      - 8080:8080
+    environment:
+      - NODE_ENV=development
+    command: yarn start
