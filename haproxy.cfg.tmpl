@@ -21,7 +21,9 @@ frontend myfrontend
 	bind 0.0.0.0:80
   # bind 0.0.0.0:443 transparent ssl crt /etc/haproxy/cert/localhost.crt ca-file /etc/haproxy/cert/ca.crt verify required crl-file /etc/haproxy/cert/root_crl.pem
   bind *:443 transparent ssl crt /usr/local/etc/haproxy/certs/server.pem ca-file /usr/local/etc/haproxy/certs/ca.pem verify optional
+	%VPATH_ACL%
   acl restricted_path path_beg,url_dec -m beg -i /secure/
+
   # http-request deny if restricted_path !{ ssl_c_used 1 } || restricted_path !{ ssl_c_verify 0 }
 	http-request set-header X-SSL                       %[ssl_fc]
 	http-request set-header X-SSL-Client-Verify         %[ssl_c_verify]
@@ -32,11 +34,13 @@ frontend myfrontend
 	http-request set-header X-SSL-Client-Not-Before     %{+Q}[ssl_c_notbefore]
 	http-request set-header X-SSL-Client-Serial         %{+Q}[ssl_c_serial,hex]
 	http-request set-header X-SSL-Client-Version        %{+Q}[ssl_c_version]
-	default_backend mybackend
+
+	%VPATH_USE_BACKEND%
 
 backend mybackend
   mode http
   option forwardfor
+	%VPATH_REQREP%
 	# a http backend
 	server s3 %APP_HOST%:8080 check
 	# a https backend
