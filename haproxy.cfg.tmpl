@@ -20,7 +20,7 @@ defaults
 frontend myfrontend
 	bind 0.0.0.0:80
   # bind 0.0.0.0:443 transparent ssl crt /etc/haproxy/cert/localhost.crt ca-file /etc/haproxy/cert/ca.crt verify required crl-file /etc/haproxy/cert/root_crl.pem
-  bind *:443 transparent ssl crt /usr/local/etc/haproxy/certs/server.pem ca-file /usr/local/etc/haproxy/certs/ca.pem verify required
+  bind *:443 transparent ssl crt /usr/local/etc/haproxy/certs/server.pem ca-file /usr/local/etc/haproxy/certs/ca.pem verify %VERIFY_REQUIRED%
 	%VPATH_ACL%
 
   %SSL_VERIFY%
