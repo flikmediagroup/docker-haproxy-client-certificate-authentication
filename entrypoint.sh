@@ -21,8 +21,17 @@ else
   touch /tmp/reqrep.txt
 fi
 
+# Add deny if SSL_VERIFY env var is set
+if [ -n "$SSL_VERIFY" ]; then
+  echo "SSL_VERIFY set to on, adding it to configuration"
+  VERIFY="http-request deny if !{ ssl_c_used 1 } || !{ ssl_c_verify 0 }"
+else
+  VERIFY=''
+fi
+
 echo "Writing new haproxy config from template"
 sed -e "s|%APP_HOST%|$APP_HOST|" \
+    -e "s|%SSL_VERIFY%|$VERIFY|" \
     -e "s|%VPATH_ACL%|$VPATH_ACL|" \
     -e "s|%VPATH_REQREP%|$(cat /tmp/reqrep.txt)|" \
     -e "s|%VPATH_USE_BACKEND%|$VPATH_USE_BACKEND|" < /tmp/haproxy.cfg.tmpl > /usr/local/etc/haproxy/haproxy.cfg

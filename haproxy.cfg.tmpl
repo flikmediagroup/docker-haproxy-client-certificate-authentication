@@ -20,11 +20,10 @@ defaults
 frontend myfrontend
 	bind 0.0.0.0:80
   # bind 0.0.0.0:443 transparent ssl crt /etc/haproxy/cert/localhost.crt ca-file /etc/haproxy/cert/ca.crt verify required crl-file /etc/haproxy/cert/root_crl.pem
-  bind *:443 transparent ssl crt /usr/local/etc/haproxy/certs/server.pem ca-file /usr/local/etc/haproxy/certs/ca.pem verify optional
+  bind *:443 transparent ssl crt /usr/local/etc/haproxy/certs/server.pem ca-file /usr/local/etc/haproxy/certs/ca.pem verify required
 	%VPATH_ACL%
-  acl restricted_path path_beg,url_dec -m beg -i /secure/
 
-  # http-request deny if restricted_path !{ ssl_c_used 1 } || restricted_path !{ ssl_c_verify 0 }
+  %SSL_VERIFY%
 	http-request set-header X-SSL                       %[ssl_fc]
 	http-request set-header X-SSL-Client-Verify         %[ssl_c_verify]
 	http-request set-header X-SSL-Client-SHA1           %{+Q}[ssl_c_sha1,hex]

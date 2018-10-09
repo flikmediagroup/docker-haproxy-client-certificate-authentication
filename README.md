@@ -10,7 +10,8 @@ http://www.loadbalancer.org/blog/client-certificate-authentication-with-haproxy/
 APP_HOST = link to your app in docker network where you want to proxy requsts
 CA_PEM = Certificate Authority cert
 SERVER_PEM = Server cert which has been signed against the CA
-*VIRTUAL_PATH = Optional setting to add reqrep to haproxy config so it listens only to this route (for example: /myapp)
+VIRTUAL_PATH = Optional setting to add reqrep to haproxy config so it listens only to this route (for example: /myapp)
+SSL_VERIFY = Optional setting to add deny to haproxy config if unverified cert was used
 ```
 
 ## docker-compose.example.yml
