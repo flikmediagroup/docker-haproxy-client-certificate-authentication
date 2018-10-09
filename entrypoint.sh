@@ -33,7 +33,7 @@ fi
 
 echo "Writing new haproxy config from template"
 sed -e "s|%APP_HOST%|$APP_HOST|" \
-    -e "s|%SSL_VERIFY%|$VERIFY|" \
+    -e "s*%SSL_VERIFY%*$VERIFY*" \
     -e "s|%VPATH_ACL%|$VPATH_ACL|" \
     -e "s|%VERIFY_REQUIRED%|$VERIFY_REQUIRED|" \
     -e "s|%VPATH_REQREP%|$(cat /tmp/reqrep.txt)|" \
