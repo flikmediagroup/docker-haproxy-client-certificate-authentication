@@ -39,4 +39,20 @@ sed -e "s|%APP_HOST%|$APP_HOST|" \
     -e "s|%VPATH_REQREP%|$(cat /tmp/reqrep.txt)|" \
     -e "s|%VPATH_USE_BACKEND%|$VPATH_USE_BACKEND|" < /tmp/haproxy.cfg.tmpl > /usr/local/etc/haproxy/haproxy.cfg
 
-haproxy -f /usr/local/etc/haproxy/haproxy.cfg
+readonly RSYSLOG_PID="/var/run/rsyslogd.pid"
+
+main() {
+  start_rsyslogd
+  start_lb "$@"
+}
+
+start_rsyslogd() {
+  rm -f $RSYSLOG_PID
+  rsyslogd
+}
+
+start_lb() {
+  exec haproxy -f /usr/local/etc/haproxy/haproxy.cfg -W -db "$@"
+}
+
+main "$@"

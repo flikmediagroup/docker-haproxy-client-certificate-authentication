@@ -7,12 +7,16 @@ global
   user                    nobody
   group                   nobody
 	maxconn 100
-  log                     127.0.0.1 local1 info
+  log                     127.0.0.1 local0 debug
   tune.ssl.default-dh-param 2048
 
 defaults
 	log                     global
 	mode http
+	option                  splice-auto
+	option                  httplog
+	option                  redispatch
+	option 									forwardfor except 127.0.0.1
 	timeout connect 5s
 	timeout client 5s
 	timeout server 5s
@@ -38,7 +42,8 @@ frontend myfrontend
 
 backend mybackend
   mode http
-  option forwardfor
+	option forwardfor
+  option http-server-close
 	%VPATH_REQREP%
 	# a http backend
 	server s3 %APP_HOST%:8080 check
