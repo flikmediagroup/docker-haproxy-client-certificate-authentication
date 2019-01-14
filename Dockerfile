@@ -1,4 +1,4 @@
-FROM haproxy:1.8.9-alpine
+FROM haproxy:1.8.17-alpine
 RUN set -exo pipefail \
     && apk add --no-cache \
         tini \
