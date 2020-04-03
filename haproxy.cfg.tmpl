@@ -29,6 +29,13 @@ defaults
 	timeout check           10s
 	maxconn 10000
 
+frontend stats
+    bind *:8404
+    stats enable
+    stats uri /stats
+    stats refresh 10s
+    stats admin if LOCALHOST
+
 frontend myfrontend
 	bind 0.0.0.0:80
   # bind 0.0.0.0:443 transparent ssl crt /etc/haproxy/cert/localhost.crt ca-file /etc/haproxy/cert/ca.crt verify required crl-file /etc/haproxy/cert/root_crl.pem
